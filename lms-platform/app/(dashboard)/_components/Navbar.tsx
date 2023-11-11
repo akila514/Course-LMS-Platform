@@ -1,3 +1,5 @@
+"use-client";
+
 import NavbarRoutes from "@/components/NavbarRoutes";
 import MobileSidebar from "./MobileSidebar";
 
