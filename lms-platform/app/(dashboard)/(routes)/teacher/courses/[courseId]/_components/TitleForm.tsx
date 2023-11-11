@@ -1,5 +1,4 @@
 "use client";
-
 import * as z from "zod";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,9 +17,22 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import { Pencil } from "lucide-react";
+import { useState } from "react";
 
-const CreateCourse = () => {
-  const router = useRouter();
+interface TitleFormProps {
+  initialData: {
+    title: string;
+  };
+  courseId: string;
+}
+
+const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
+  const [isEditing, setIsEditing] = useState(false);
+
+  const toggleEdit = () => {
+    setIsEditing((currunt) => !currunt);
+  };
 
   const formSchema = z.object({
     title: z.string().min(1, {
@@ -38,32 +50,33 @@ const CreateCourse = () => {
   const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    try {
-      const response = await axios.post("/api/courses", values);
-
-      router.push(`/teacher/courses/${response.data.id}`);
-
-      toast.success("Your new Course Created.");
-    } catch {
-      toast.error("Something went wrong.Please try again later.");
-    }
+    console.log(values);
   };
 
   return (
-    <div className="pl-5 max-w-5xl mx-auto flex md:items-center md:justify-center h-full">
-      <div>
-        <h1 className="text-2xl">Name your course</h1>
-        <p className="text-sm text-slate-600 mb-10">
-          What would you like to name your course. You can change it later
-        </p>
+    <div className="border bg-slate-100 rounded-md p-4 mt-5">
+      <div className="font-medium items-center justify-between flex mx-auto">
+        Course Title
+        <Button onClick={toggleEdit} variant="ghost">
+          {isEditing && <>Cancel</>}
+          {!isEditing && (
+            <>
+              <Pencil className="h-4 w-4 mr-2" />
+              Edit Title
+            </>
+          )}
+        </Button>
+      </div>
+      {!isEditing && <p className="text-sm mt-2">{initialData.title}</p>}
+
+      {isEditing && (
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
               control={form.control}
               name="title"
               render={({ field }) => (
                 <FormItem className="space-y-2">
-                  <FormLabel>Course Title</FormLabel>
                   <FormControl>
                     <Input
                       disabled={isSubmitting}
@@ -78,21 +91,19 @@ const CreateCourse = () => {
                 </FormItem>
               )}
             />
-            <div className="flex items-center gap-x-2">
-              <Link href="/">
-                <Button variant="ghost" type="button">
-                  Cancel
-                </Button>
-              </Link>
-            </div>
-            <Button type="submit" disabled={!isValid || isSubmitting}>
-              Continue
+
+            <Button
+              className="mt-4 w-[100px]"
+              type="submit"
+              disabled={!isValid || isSubmitting}
+            >
+              Save
             </Button>
           </form>
         </Form>
-      </div>
+      )}
     </div>
   );
 };
 
-export default CreateCourse;
+export default TitleForm;
