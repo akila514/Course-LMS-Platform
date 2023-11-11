@@ -1,3 +1,4 @@
+"use client";
 const SearchPage = () => {
   return <div>Search</div>;
 };
