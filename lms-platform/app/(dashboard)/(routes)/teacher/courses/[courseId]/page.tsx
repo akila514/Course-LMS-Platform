@@ -32,24 +32,30 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
 
   return (
     <div className="md:ml-5 max-w-5xl  md:items-center md:justify-center h-full">
-      <div className="flex items-center justify-between">
-        <div className="flex flex-col gap-y-2">
-          <h1 className="text-2xl font-medium">Course Setup</h1>
-          <span className="text-sm text-slate-700">
-            Complete all fields {completionText}
-          </span>
-        </div>
-      </div>
-      <div className="gap-6 mt-10">
-        <div className="flex items-center gap-x-4">
-          <IconBadge icon={LayoutDashboard} />
-          <h2 className="text-xl ml-2">Customize your course</h2>
-        </div>
-        <TitleForm initialData={course} courseId={course.id} />
+      <div className="grid grid-cols-1 md:grid-cols-2">
+        <div>
+          <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-y-2">
+              <h1 className="text-2xl font-medium">Course Setup</h1>
+              <span className="text-sm text-slate-700">
+                Complete all fields {completionText}
+              </span>
+            </div>
+          </div>
+          <div className="gap-6 mt-10">
+            <div className="flex items-center gap-x-4">
+              <IconBadge icon={LayoutDashboard} />
+              <h2 className="text-xl ml-2">Customize your course</h2>
+            </div>
+            <TitleForm initialData={course} courseId={course.id} />
 
-        <DescriptionForm courseId={course.id} initialData={course} />
+            <DescriptionForm courseId={course.id} initialData={course} />
 
-        <ImageForm initialData={course} courseId={course.id} />
+            <ImageForm initialData={course} courseId={course.id} />
+
+            
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -4,22 +4,10 @@ import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import toast from "react-hot-toast";
 import { ImageIcon, Pencil, PlusCircle, PlusCircleIcon } from "lucide-react";
 import { useState } from "react";
-import { cn } from "@/lib/utils";
-import { Textarea } from "@/components/ui/textarea";
 import { Course } from "@prisma/client";
 import Image from "next/image";
 import { FileUpload } from "@/components/FileUpload";
@@ -43,15 +31,6 @@ const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
       message: "Image is required.",
     }),
   });
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      image: initialData.image || "",
-    },
-  });
-
-  const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {

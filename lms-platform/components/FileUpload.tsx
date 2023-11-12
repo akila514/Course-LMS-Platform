@@ -20,8 +20,6 @@ export const FileUpload = ({ onChange, endpoint }: fileUploadProps) => (
     onUploadError={(error: Error) => {
       toast.error("File upload failed." + error?.message);
     }}
-    onUploadBegin={(name: string) => {
-      toast.loading("Uploading: " + name);
-    }}
+    onUploadBegin={(name: string) => {}}
   />
 );

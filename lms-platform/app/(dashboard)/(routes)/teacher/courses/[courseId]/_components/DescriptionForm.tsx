@@ -1,4 +1,5 @@
 "use client";
+
 import * as z from "zod";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -108,7 +109,6 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
                 </FormItem>
               )}
             />
-
             <Button
               className="mt-4 w-[100px]"
               type="submit"
