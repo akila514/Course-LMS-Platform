@@ -1,6 +1,5 @@
 import { IconBadge } from "@/components/IconBadge";
 import { db } from "@/lib/db";
-import { auth } from "@clerk/nextjs";
 import { LayoutDashboard } from "lucide-react";
 import { redirect } from "next/navigation";
 import TitleForm from "./_components/TitleForm";
@@ -10,9 +9,8 @@ import ImageForm from "./_components/ImageForm";
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   const course = await db.course.findUnique({ where: { id: params.courseId } });
 
-  const { userId } = auth();
 
-  if (!userId || !course) {
+  if (!course) {
     return redirect("/");
   }
 
@@ -52,8 +50,6 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
             <DescriptionForm courseId={course.id} initialData={course} />
 
             <ImageForm initialData={course} courseId={course.id} />
-
-            
           </div>
         </div>
       </div>

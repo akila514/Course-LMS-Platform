@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { ClerkProvider } from "@clerk/nextjs";
 import TostProvider from "@/components/providers/ToastProvider";
 
 export const metadata: Metadata = {
@@ -15,13 +14,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
       <html lang="en">
         <body suppressHydrationWarning={true}>
           <TostProvider />
           {children}
         </body>
       </html>
-    </ClerkProvider>
   );
 }
