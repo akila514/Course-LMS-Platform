@@ -6,9 +6,12 @@ import { redirect } from "next/navigation";
 import TitleForm from "./_components/TitleForm";
 import DescriptionForm from "./_components/DescriptionForm";
 import ImageForm from "./_components/ImageForm";
+import CategoryForm from "./_components/CategoryForm";
 
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   const course = await db.course.findUnique({ where: { id: params.courseId } });
+
+  const categories = await db.category.findMany({ orderBy: { name: "asc" } });
 
   const { userId } = auth();
 
@@ -31,7 +34,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   const completionText = `(${completedFields}/${totalFields})`;
 
   return (
-    <div className="md:ml-5 max-w-5xl  md:items-center md:justify-center h-full">
+    <div className="md:ml-5 md:items-center md:justify-center h-full">
       <div className="grid grid-cols-1 md:grid-cols-2">
         <div>
           <div className="flex items-center justify-between">
@@ -53,9 +56,17 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
 
             <ImageForm initialData={course} courseId={course.id} />
 
-            
+            <CategoryForm
+              courseId={course.id}
+              initialData={course}
+              options={categories.map((category) => ({
+                label: category.name,
+                value: category.id,
+              }))}
+            />
           </div>
         </div>
+        <div>hkjk</div>
       </div>
     </div>
   );
