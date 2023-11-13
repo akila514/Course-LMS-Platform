@@ -14,11 +14,15 @@ import ImageForm from "./_components/ImageForm";
 import CategoryForm from "./_components/CategoryForm";
 import PriceForm from "./_components/PriceForm";
 import AttachmentsForm from "./_components/AttachmentsForm";
+import ChaptersForm from "./_components/chaptersForm";
 
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   const course = await db.course.findUnique({
     where: { id: params.courseId },
     include: {
+      chapters:{orderBy:{
+        osition:"asc"
+      }},
       attachments: {
         orderBy: {
           createdAt: "desc",
@@ -92,7 +96,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
                   Course Chapters
                 </p>
               </div>
-              <AttachmentsForm initialData={course} courseId={course.id} />
+              <ChaptersForm courseId={course.id} initialData={course} />
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={CircleDollarSign} />
                 <p className="text-lg ml-2 font-medium text-sky-700">
