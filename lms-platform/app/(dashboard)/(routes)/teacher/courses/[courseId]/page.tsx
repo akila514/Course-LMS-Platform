@@ -65,7 +65,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
               <div className="gap-6">
                 <div className="flex items-center">
                   <IconBadge icon={LayoutDashboard} />
-                  <p className="text-lg ml-2 font-medium">
+                  <p className="text-lg ml-2 font-medium text-sky-700">
                     Customize your course
                   </p>
                 </div>
@@ -88,17 +88,21 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
             <div className="mt-5 md:mt-0 md:p-5 space-y-6">
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={ListChecks} />
-                <p className="text-lg ml-2 font-medium">Course Chapters</p>
+                <p className="text-lg ml-2 font-medium text-sky-700">
+                  Course Chapters
+                </p>
               </div>
               <AttachmentsForm initialData={course} courseId={course.id} />
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={CircleDollarSign} />
-                <p className="text-lg ml-2 font-medium">Sell your course</p>
+                <p className="text-lg ml-2 font-medium text-sky-700">
+                  Sell your course
+                </p>
               </div>
               <PriceForm courseId={course.id} initialData={course} />
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={File} />
-                <p className="text-lg ml-2 font-medium">
+                <p className="text-lg ml-2 font-medium text-sky-700">
                   Resourses & Attachments
                 </p>
               </div>
