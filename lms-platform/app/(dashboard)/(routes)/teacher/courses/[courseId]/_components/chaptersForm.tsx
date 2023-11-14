@@ -17,36 +17,36 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import { Pencil } from "lucide-react";
+import { Pencil, PlusCircle } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
-import { Course } from "@prisma/client";
+import { Chapter, Course } from "@prisma/client";
+import { Input } from "@/components/ui/input";
 
 interface ChaptersFormProps {
-  initialData: Course;
+  initialData: Course & { chapters: Chapter[] };
   courseId: string;
 }
 
 const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
-  const [isEditing, setIsEditing] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
 
-  const toggleEdit = () => {
-    setIsEditing((currunt) => !currunt);
+  const toggleCreting = () => {
+    setIsCreating((currunt) => !currunt);
   };
 
   const router = useRouter();
 
   const formSchema = z.object({
-    description: z.string().min(1, {
-      message: "Description is required.",
-    }),
+    title: z.string().min(1),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      description: initialData.description || "",
+      title: "",
     },
   });
 
@@ -54,9 +54,9 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Course updated");
-      toggleEdit();
+      await axios.post(`/api/courses/${courseId}/chapters`, values);
+      toast.success("Chapter created");
+      toggleCreting();
 
       router.refresh();
     } catch (error) {
@@ -67,40 +67,30 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
   return (
     <div className="border bg-slate-100 rounded-md p-4 mt-5">
       <div className="font-medium items-center justify-between flex mx-auto">
-        Course Description
-        <Button className="mb-1" onClick={toggleEdit} variant="ghost">
-          {isEditing && <>Cancel</>}
-          {!isEditing && (
+        Course Chapters
+        <Button className="mb-1" onClick={toggleCreting} variant="ghost">
+          {isCreating && <>Cancel</>}
+          {!isCreating && (
             <>
-              <Pencil className="h-4 w-4 mr-2" />
-              Edit Description
+              <PlusCircle className="h-4 w-4 mr-2" />
+              Add a chapter
             </>
           )}
         </Button>
       </div>
-      {!isEditing && (
-        <p
-          className={cn(
-            "text-sm mt-2",
-            !initialData.description && "text-slate-500 italic"
-          )}
-        >
-          {initialData.description || "No Description"}
-        </p>
-      )}
 
-      {isEditing && (
+      {isCreating && (
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
               control={form.control}
-              name="description"
+              name="title"
               render={({ field }) => (
                 <FormItem className="space-y-2">
                   <FormControl>
-                    <Textarea
+                    <Input
                       disabled={isSubmitting}
-                      placeholder="e.g. 'This course is about...'"
+                      placeholder="e.g. 'Introduction to course...'"
                       {...field}
                     />
                   </FormControl>
@@ -114,10 +104,25 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
               type="submit"
               disabled={!isValid || isSubmitting}
             >
-              Save
+              Create
             </Button>
           </form>
         </Form>
+      )}
+      {!isCreating && (
+        <>
+          <p
+            className={cn(
+              "text-sm mt-2",
+              initialData.chapters.length === 0 && "text-slate-500 italic"
+            )}
+          >
+            {!initialData.chapters.length && <p>No Chapters added yet</p>}
+          </p>
+          <p className="text-xs text-muted-foreground mt-4">
+            Drag and drop to reorder the chapters
+          </p>
+        </>
       )}
     </div>
   );

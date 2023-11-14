@@ -20,9 +20,11 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   const course = await db.course.findUnique({
     where: { id: params.courseId },
     include: {
-      chapters:{orderBy:{
-        osition:"asc"
-      }},
+      chapters: {
+        orderBy: {
+          position: "asc",
+        },
+      },
       attachments: {
         orderBy: {
           createdAt: "desc",
@@ -45,6 +47,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
     course.image,
     course.price,
     course.categoryId,
+    course.chapters.some((chapter) => chapter.isPublished),
   ];
 
   const totalFields = requiredFields.length;
@@ -89,7 +92,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
                 />
               </div>
             </div>
-            <div className="mt-5 md:mt-0 md:p-5 space-y-6">
+            <div className="mt-5 md:mt-0 md:p-5">
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={ListChecks} />
                 <p className="text-lg ml-2 font-medium text-sky-700">
@@ -97,14 +100,14 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
                 </p>
               </div>
               <ChaptersForm courseId={course.id} initialData={course} />
-              <div className="flex items-center gap-x-2">
+              <div className="flex items-center gap-x-2 mt-5">
                 <IconBadge icon={CircleDollarSign} />
                 <p className="text-lg ml-2 font-medium text-sky-700">
                   Sell your course
                 </p>
               </div>
               <PriceForm courseId={course.id} initialData={course} />
-              <div className="flex items-center gap-x-2">
+              <div className="flex items-center gap-x-2 mt-5">
                 <IconBadge icon={File} />
                 <p className="text-lg ml-2 font-medium text-sky-700">
                   Resourses & Attachments
