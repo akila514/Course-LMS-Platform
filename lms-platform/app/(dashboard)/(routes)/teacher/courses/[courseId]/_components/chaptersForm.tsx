@@ -17,12 +17,21 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import { Pencil, PlusCircle } from "lucide-react";
-import { useState } from "react";
+import { PlusCircle } from "lucide-react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import { Chapter, Course } from "@prisma/client";
 import { Input } from "@/components/ui/input";
+import { Grid, Grip, Pencil } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "@hello-pangea/dnd";
 
 interface ChaptersFormProps {
   initialData: Course & { chapters: Chapter[] };
@@ -30,14 +39,14 @@ interface ChaptersFormProps {
 }
 
 const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
+  const router = useRouter();
+
   const [isUpdating, setIsUpdating] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
 
   const toggleCreting = () => {
     setIsCreating((currunt) => !currunt);
   };
-
-  const router = useRouter();
 
   const formSchema = z.object({
     title: z.string().min(1),
@@ -54,7 +63,10 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.post(`/api/courses/${courseId}/chapters`, values);
+      const newChapter = await axios.post(
+        `/api/courses/${courseId}/chapters`,
+        values
+      );
       toast.success("Chapter created");
       toggleCreting();
 
@@ -111,14 +123,75 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
       )}
       {!isCreating && (
         <>
-          <p
+          <div
             className={cn(
               "text-sm mt-2",
               initialData.chapters.length === 0 && "text-slate-500 italic"
             )}
           >
             {!initialData.chapters.length && <p>No Chapters added yet</p>}
-          </p>
+            {initialData.chapters.length > 0 && (
+              <>
+                <DragDropContext onDragEnd={() => {}}>
+                  <Droppable droppableId="chapters">
+                    {(provided) => (
+                      <div {...provided.droppableProps} ref={provided.innerRef}>
+                        {initialData.chapters.map((chapter, index) => (
+                          <Draggable
+                            key={chapter.id}
+                            draggableId={chapter.id}
+                            index={index}
+                          >
+                            {(provided) => (
+                              <div
+                                className={cn(
+                                  "flex items-center gap-x-2 bg-slate-200 border-slate-200 border text-slate-700 rounded-md mb-4 text-sm",
+                                  chapter.isPublished &&
+                                    "bg-sky-100 border-sky-200 text-sky-700"
+                                )}
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                              >
+                                <div
+                                  className={cn(
+                                    "px-2 py-3 border-r border-r-slate-200 hover:bg-slate-300 rounded-l-md transition",
+                                    chapter.isPublished &&
+                                      "border-r-sky-200 hover:bg-sky-200"
+                                  )}
+                                  {...provided.dragHandleProps}
+                                >
+                                  <Grip className="h-5 w-5" />
+                                </div>
+                                {chapter.title}
+                                <div className="ml-auto pr-2 flex items-center gap-x-2">
+                                  {chapter.isFree && <Badge>Free</Badge>}
+                                  <Badge
+                                    className={cn(
+                                      "bg-slate-500",
+                                      chapter.isPublished && "bg-sky-700"
+                                    )}
+                                  >
+                                    {chapter.isPublished
+                                      ? "Published"
+                                      : "Draft"}
+                                  </Badge>
+                                  <Pencil
+                                    onClick={() => {}}
+                                    className="w-4 h-4 cursor-pointer hover:opacity-75 transition"
+                                  />
+                                </div>
+                              </div>
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </DragDropContext>
+              </>
+            )}
+          </div>
           <p className="text-xs text-muted-foreground mt-4">
             Drag and drop to reorder the chapters
           </p>
