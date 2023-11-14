@@ -41,6 +41,7 @@ interface ChaptersFormProps {
 const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
   const router = useRouter();
 
+  const [chapters, setChapters] = useState(initialData.chapters);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
 
@@ -59,6 +60,28 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
     },
   });
 
+  const onDragEnd = (result: DropResult) => {
+    if (!result.destination) return;
+
+    const items = Array.from(chapters);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    const startIndex = Math.min(result.source.index, result.destination.index);
+    const endIndex = Math.max(result.source.index, result.destination.index);
+
+    const updatedChapters = items.slice(startIndex, endIndex + 1);
+
+    setChapters(items);
+
+    const bulkUpdateData = updatedChapters.map((chapter) => ({
+      id: chapter.id,
+      position: items.findIndex((item) => item.id === chapter.id),
+    }));
+
+    onReorder(bulkUpdateData);
+  };
+
   const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -73,6 +96,23 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
       router.refresh();
     } catch (error) {
       toast.error("Something went wrong");
+    }
+  };
+
+  const onReorder = async (updatedData: { id: string; position: number }[]) => {
+    try {
+      setIsUpdating(true);
+
+      await axios.put(`/api/courses/${courseId}/chapters/reorder`, {
+        list: updatedData,
+      });
+
+      toast.success("Chapteres reordered");
+      router.refresh();
+    } catch (error) {
+      toast.error("Something went wrong");
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -132,11 +172,11 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
             {!initialData.chapters.length && <p>No Chapters added yet</p>}
             {initialData.chapters.length > 0 && (
               <>
-                <DragDropContext onDragEnd={() => {}}>
+                <DragDropContext onDragEnd={onDragEnd}>
                   <Droppable droppableId="chapters">
                     {(provided) => (
                       <div {...provided.droppableProps} ref={provided.innerRef}>
-                        {initialData.chapters.map((chapter, index) => (
+                        {chapters.map((chapter, index) => (
                           <Draggable
                             key={chapter.id}
                             draggableId={chapter.id}
