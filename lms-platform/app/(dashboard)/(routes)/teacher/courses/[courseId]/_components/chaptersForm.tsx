@@ -17,7 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import { PlusCircle } from "lucide-react";
+import { Loader2, PlusCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
@@ -86,17 +86,25 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      setIsUpdating(true);
       const newChapter = await axios.post(
         `/api/courses/${courseId}/chapters`,
         values
       );
-      toast.success("Chapter created");
-      toggleCreting();
 
+      setChapters((prevChapters) => [...prevChapters, newChapter.data]);
+
+      toast.success("Chapter created");
       router.refresh();
+
+      console.log(initialData.chapters);
+      console.log(chapters);
+
+      toggleCreting();
     } catch (error) {
       toast.error("Something went wrong");
     }
+    setIsUpdating(false);
   };
 
   const onReorder = async (updatedData: { id: string; position: number }[]) => {
@@ -116,8 +124,17 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
     }
   };
 
+  const onEdit = (id: string) => {
+    router.push(`chapters/${id}`);
+  };
+
   return (
-    <div className="border bg-slate-100 rounded-md p-4 mt-5">
+    <div className="border bg-slate-100 rounded-md p-4 mt-5 relative">
+      {isUpdating && (
+        <div className="absolute h-full w-full bg-slate-500/20 top-0 right-0 rounded-md flex items-center justify-center">
+          <Loader2 className="animate-spin h-6 w-6 text-sky-700" />
+        </div>
+      )}
       <div className="font-medium items-center justify-between flex mx-auto">
         Course Chapters
         <Button className="mb-1" onClick={toggleCreting} variant="ghost">
@@ -216,7 +233,9 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
                                       : "Draft"}
                                   </Badge>
                                   <Pencil
-                                    onClick={() => {}}
+                                    onClick={() => {
+                                      onEdit(chapter.id);
+                                    }}
                                     className="w-4 h-4 cursor-pointer hover:opacity-75 transition"
                                   />
                                 </div>
