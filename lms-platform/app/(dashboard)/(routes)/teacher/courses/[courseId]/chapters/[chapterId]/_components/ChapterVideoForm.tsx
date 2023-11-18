@@ -84,7 +84,10 @@ const ChapterVideoForm = ({
           </div>
         ) : (
           <div className="relative aspect-video mt-2">
-            <MuxPlayer playbackId={initialData?.muxData?.playbackId || ""} />
+            <MuxPlayer
+              className="h-[250px]"
+              playbackId={initialData?.muxData?.playbackId || ""}
+            />
           </div>
         ))}
 
@@ -99,15 +102,19 @@ const ChapterVideoForm = ({
             }}
           />
           <div className="text-xs text-muted-foreground mt-4">
-            Upload this chapter\'s video.'
+            Upload this chapter's video.'
           </div>
         </div>
       )}
       {initialData.videoUrl && !isEditing && (
-        <div className="text-sm text-muted-foreground mt-2">
-          Videos can take a few minutes to process. Refresh the page if video
-          deos not appear.
-        </div>
+        <>
+          <p className="text-sm text-muted-foreground mt-2">
+            Videos can take a few minutes to process.
+          </p>
+          <p className="text-sm text-muted-foreground mt-2">
+            Refresh the page if video deos not appear.
+          </p>
+        </>
       )}
     </div>
   );
