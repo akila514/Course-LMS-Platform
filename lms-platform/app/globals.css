@@ -14,6 +14,10 @@ body,
     "Helvetica Neue", Arial, sans-serif;
 }
 
+.ql-container {
+  font-size: 16px !important;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

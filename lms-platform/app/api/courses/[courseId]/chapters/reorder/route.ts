@@ -13,7 +13,7 @@ export async function PUT(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const courseOwner = db.course.findUnique({
+    const courseOwner =await db.course.findUnique({
       where: {
         id: params.courseId,
         userId: userId,
