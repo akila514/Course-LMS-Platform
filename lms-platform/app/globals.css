@@ -18,6 +18,15 @@ body,
   font-size: 16px !important;
 }
 
+.no-srollbar ::-webkit-scrollbar {
+  display: none;
+}
+
+.no-srollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

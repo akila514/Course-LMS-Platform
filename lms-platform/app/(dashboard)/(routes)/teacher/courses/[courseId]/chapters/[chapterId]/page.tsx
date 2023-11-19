@@ -10,6 +10,8 @@ import { Editor } from "@/components/Editor";
 import ChapterDescriptionForm from "./_components/ChapterDescriptionForm";
 import ChapterAccessForm from "./_components/ChapterAccessForm";
 import ChapterVideoForm from "./_components/ChapterVideoForm";
+import Banner from "@/components/Banner";
+import ChapterActions from "./_components/ChapterActions";
 
 const ChapterIdPage = async ({
   params,
@@ -42,23 +44,39 @@ const ChapterIdPage = async ({
   const completedFields = requiredFields.filter(Boolean).length;
 
   const completionText = `(${completedFields}/${totalFileds})`;
+  const isComplete = requiredFields.every(Boolean);
 
   return (
     <div className="w-full">
+      {!chapter.isPublished && (
+        <Banner
+          variant="warning"
+          label="This chapter is unpublished. It will not be visible in the course"
+        />
+      )}
       <div className="max-w-7xl flex mx-auto">
         <div className="md:ml-5 md:items-center md:justify-center h-full justify-center w-full">
-          <div className="flex flex-col gap-y-2">
-            <Link href={`/teacher/courses/${params.courseId}`}>
-              <div className="flex items-center text-sm hover:opacity-75 transition mb-6">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Go back course setup
-              </div>
-            </Link>
-            <h1 className="text-2xl font-medium">Course Setup</h1>
-            <span className="text-sm text-slate-700 mb-10">
-              Complete all fields {completionText}
-            </span>
+          <div className="flex flex-row justify-between">
+            <div className="flex flex-col gap-y-2">
+              <Link href={`/teacher/courses/${params.courseId}`}>
+                <div className="flex items-center text-sm hover:opacity-75 transition mb-6">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Go back course setup
+                </div>
+              </Link>
+              <h1 className="text-2xl font-medium">Course Setup</h1>
+              <span className="text-sm text-slate-700 mb-10">
+                Complete all fields {completionText}
+              </span>
+            </div>
+            <ChapterActions
+              chapterId={params.chapterId}
+              courseId={params.courseId}
+              disabled={!isComplete}
+              isPublished={chapter.isPublished}
+            />
           </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-2 pb-20  max-w-7xl">
             <div className="md:p-5">
               <div className="flex items-center justify-between">

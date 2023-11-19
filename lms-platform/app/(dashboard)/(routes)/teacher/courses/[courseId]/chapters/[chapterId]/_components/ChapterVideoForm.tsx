@@ -111,7 +111,7 @@ const ChapterVideoForm = ({
           <p className="text-sm text-muted-foreground mt-2">
             Videos can take a few minutes to process.
           </p>
-          <p className="text-sm text-muted-foreground mt-2">
+          <p className="text-xs text-muted-foreground mt-2">
             Refresh the page if video deos not appear.
           </p>
         </>

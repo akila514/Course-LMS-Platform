@@ -74,7 +74,7 @@ const ChapterAccessForm = ({
   };
 
   return (
-    <div className="border bg-slate-100 rounded-md p-4 mt-5">
+    <div className="border bg-slate-100 rounded-md p-4 mt-5 w-full">
       <div className="font-medium items-center justify-between flex mx-auto">
         Chapter access settings
         <Button className="mb-1" onClick={toggleEdit} variant="ghost">
