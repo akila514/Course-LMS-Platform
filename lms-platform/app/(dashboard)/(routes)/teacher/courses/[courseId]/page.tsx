@@ -15,6 +15,8 @@ import CategoryForm from "./_components/CategoryForm";
 import PriceForm from "./_components/PriceForm";
 import AttachmentsForm from "./_components/AttachmentsForm";
 import ChaptersForm from "./_components/chaptersForm";
+import Banner from "@/components/Banner";
+import Actions from "./_components/Actions";
 
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   const course = await db.course.findUnique({
@@ -56,8 +58,16 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
 
   const completionText = `(${completedFields}/${totalFields})`;
 
+  const isComplete = requiredFields.every(Boolean);
+
   return (
     <div className="w-full">
+      {!course.isPublished && (
+        <Banner
+          variant="warning"
+          label="This course is unpublished. It will not be visible to the students"
+        />
+      )}
       <div className="max-w-7xl flex mx-auto">
         <div className="md:ml-5 md:items-center md:justify-center h-full justify-center w-full">
           <div className="flex flex-col gap-y-2">
@@ -66,6 +76,11 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
               Complete all fields {completionText}
             </span>
           </div>
+          <Actions
+            courseId={params.courseId}
+            disabled={!isComplete}
+            isPublished={course.isPublished}
+          />
           <div className="grid grid-cols-1 lg:grid-cols-2 pb-20 max-w-7xl">
             <div className="md:p-5">
               <div className="flex items-center justify-between"></div>
