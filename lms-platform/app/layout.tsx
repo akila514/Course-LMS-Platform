@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import TostProvider from "@/components/providers/ToastProvider";
+import ConfettiProvider from "@/components/providers/ConfettiProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,6 +19,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body suppressHydrationWarning={true}>
+          <ConfettiProvider />
           <TostProvider />
           {children}
         </body>
