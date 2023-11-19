@@ -70,17 +70,20 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
       )}
       <div className="max-w-7xl flex mx-auto">
         <div className="md:ml-5 md:items-center md:justify-center h-full justify-center w-full">
-          <div className="flex flex-col gap-y-2">
-            <h1 className="text-2xl font-medium">Course Setup</h1>
-            <span className="text-sm text-slate-700 mb-10">
-              Complete all fields {completionText}
-            </span>
+          <div className="flex flex-row justify-between">
+            <div className="flex flex-col gap-y-2">
+              <h1 className="text-2xl font-medium">Course Setup</h1>
+              <span className="text-sm text-slate-700 mb-10">
+                Complete all fields {completionText}
+              </span>
+            </div>
+            <Actions
+              courseId={params.courseId}
+              disabled={!isComplete}
+              isPublished={course.isPublished}
+            />
           </div>
-          <Actions
-            courseId={params.courseId}
-            disabled={!isComplete}
-            isPublished={course.isPublished}
-          />
+
           <div className="grid grid-cols-1 lg:grid-cols-2 pb-20 max-w-7xl">
             <div className="md:p-5">
               <div className="flex items-center justify-between"></div>
