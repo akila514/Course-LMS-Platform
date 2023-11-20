@@ -44,6 +44,7 @@ const CreateCourse = () => {
       router.push(`/teacher/courses/${response.data.id}`);
 
       toast.success("Your new Course Created.");
+      router.refresh();
     } catch {
       toast.error("Something went wrong.Please try again later.");
     }
@@ -78,16 +79,16 @@ const CreateCourse = () => {
                 </FormItem>
               )}
             />
-            <div className="flex items-center gap-x-2">
+            <div className="flex items-center gap-x-4">
               <Link href="/">
                 <Button variant="ghost" type="button">
                   Cancel
                 </Button>
               </Link>
+              <Button type="submit" disabled={!isValid || isSubmitting}>
+                Continue
+              </Button>
             </div>
-            <Button type="submit" disabled={!isValid || isSubmitting}>
-              Continue
-            </Button>
           </form>
         </Form>
       </div>

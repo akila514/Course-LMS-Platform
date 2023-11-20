@@ -18,13 +18,8 @@ body,
   font-size: 16px !important;
 }
 
-.no-srollbar ::-webkit-scrollbar {
-  display: none;
-}
-
-.no-srollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+body:focus {
+  outline: none;
 }
 
 @layer base {
