@@ -29,7 +29,7 @@ const iconMap: Record<Category["name"], IconType> = {
 
 const Categories = ({ items }: CategoriesProps) => {
   return (
-    <div className="flex items-center justify-between w-full gap-x-2 overflow-x-auto pb-2">
+    <div className="flex items-center justify-evenly w-full gap-x-2 overflow-x-auto pb-2">
       {items.map((item) => (
         <CategoreyItem
           key={item.id}
