@@ -4,6 +4,6 @@ const CoursePage = () => {
       Watch the course
     </div>
   );
-};
+}; 
 
 export default CoursePage;

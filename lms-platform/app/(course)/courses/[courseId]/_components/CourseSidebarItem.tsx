@@ -1,6 +1,7 @@
 "use client";
 
-import { CheckCircle, LockIcon, PlayCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { CheckCircle, Lock, LockIcon, PlayCircle } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
 interface CourseSidebarItemProps {
@@ -21,7 +22,7 @@ const CourseSidebarItem = ({
   const pathName = usePathname();
   const router = useRouter();
 
-  const Icon = isLocked ? LockIcon : isComplete ? CheckCircle : PlayCircle;
+  const Icon = isLocked ? Lock : isComplete ? CheckCircle : PlayCircle;
 
   const isActive = pathName?.includes(id);
 
@@ -30,11 +31,34 @@ const CourseSidebarItem = ({
   };
 
   return (
-    <button>
+    <button
+      onClick={onClick}
+      className={cn(
+        "flex items-center gap-x-2 text-slate-500 text-sm font-medium transition-all pl-6 hover:text-slate-600 hover:bg-slate-300/20",
+        isActive &&
+          "text-slate-700 bg-slate-200/20 hover:bg-slate-200/20 hover:text-slate-700",
+        isComplete && "text-emerald-700 hover:text-emerald-600",
+        isComplete && isActive && "bg-emerald-200/20"
+      )}
+    >
       <div className="flex flex-row space-x-2">
-        <Icon />
+        <Icon
+          size={22}
+          className={cn(
+            "text-slate-500",
+            isActive && "text-slate-700",
+            isComplete && "text-emerald-700"
+          )}
+        />
         <p> {label}</p>
       </div>
+      <div
+        className={cn(
+          "ml-auto opacity-0 border-2 border-slate-700 h-full transition-all",
+          isActive && "opacity-100",
+          isComplete && "border-emerald-700"
+        )}
+      />
     </button>
   );
 };
