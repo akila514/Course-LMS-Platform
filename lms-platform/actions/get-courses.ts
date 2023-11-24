@@ -3,7 +3,7 @@ import { Category, Course } from "@prisma/client";
 import { getProgress } from "./get-progress";
 
 type CourseWithProgressWithCategory = Course & {
-  category: Category | null;
+  categorey: Category | null;
   chapters: { id: string }[];
   progress: number | null;
 };
