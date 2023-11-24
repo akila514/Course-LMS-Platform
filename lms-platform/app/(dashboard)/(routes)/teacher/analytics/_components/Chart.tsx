@@ -20,6 +20,7 @@ interface ChartProps {
 
 const Chart = ({ data }: ChartProps) => {
   return (
+    //Recharts
     <Card className="p-4">
       <ResponsiveContainer width="100%" height={350}>
         <BarChart data={data}>
