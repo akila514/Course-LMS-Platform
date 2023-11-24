@@ -27,8 +27,8 @@ const CourseCard = ({
 }: CourseCardProps) => {
   return (
     <Link href={`/courses/${id}`}>
-      <div className="w-[350px] flex flex-col border space-y-2 border-slate-200 p-4 rounded-md">
-        <img src={image} className="object-cover" />
+      <div className="w-[300px] flex flex-col border space-y-2 border-slate-200 p-4 rounded-md">
+        <img src={image} className="object-cover h-[100px]" />
         <p className="text-lg font-medium ">{title}</p>
         <p className="text-muted-foreground text-sm">{category}</p>
         <div className="flex flex-row space-x-2">
