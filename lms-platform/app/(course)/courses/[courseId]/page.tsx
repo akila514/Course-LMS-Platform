@@ -1,9 +1,28 @@
-const CoursePage = () => {
-  return (
-    <div className="pl-5 max-w-5xl mx-auto flex md:items-center md:justify-center h-full">
-      Watch the course
-    </div>
-  );
-}; 
+import { db } from "@/lib/db";
+import { redirect } from "next/navigation";
+
+const CoursePage = async ({ params }: { params: { courseId: string } }) => {
+  const course = await db.course.findUnique({
+    where: {
+      id: params.courseId,
+    },
+    include: {
+      chapters: {
+        where: {
+          isPublished: true,
+        },
+        orderBy: {
+          position: "asc",
+        },
+      },
+    },
+  });
+
+  if (!course) {
+    redirect("/");
+  }
+
+  return redirect(`/courses/${course.id}/chapters/${course.chapters[0].id}`);
+};
 
 export default CoursePage;
