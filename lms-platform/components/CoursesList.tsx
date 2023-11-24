@@ -14,7 +14,7 @@ interface CoursesListProps {
 const CoursesList = ({ items }: CoursesListProps) => {
   return (
     <div>
-      <div className="w-full flex flex-wrap gap-4 items-center justify-center mx-auto">
+      <div className="w-full flex flex-wrap gap-4">
         {items.map((item) => (
           <CourseCard
             key={item.id}
